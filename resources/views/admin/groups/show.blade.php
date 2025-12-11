@@ -45,7 +45,7 @@
     <!-- Users -->
     <div class="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
         <h3 class="text-lg font-semibold text-white mb-4">
-            <i class="fas fa-users text-blue-400 mr-2"></i>Foydalanuvchilar ({{ $group->users->count() }})
+            <i class="fas fa-users text-blue-400 mr-2"></i>Askarlar ({{ $group->users->count() }})
         </h3>
         @if($group->users->count() > 0)
         <div class="space-y-2">

@@ -16,7 +16,7 @@
     <div class="stat-card gradient-info rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <p class="text-blue-100 text-sm mb-1">Jami Foydalanuvchilar</p>
+                <p class="text-blue-100 text-sm mb-1">Jami Askarlar</p>
                 <p class="text-4xl font-bold">{{ $totalUsers }}</p>
             </div>
             <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
@@ -25,7 +25,7 @@
         </div>
         <div class="flex items-center text-sm text-blue-100">
             <i class="fas fa-arrow-up mr-2"></i>
-            <span>Barcha foydalanuvchilar</span>
+            <span>Barcha askarlar</span>
         </div>
     </div>
 
@@ -33,7 +33,7 @@
     <div class="stat-card gradient-success rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <p class="text-green-100 text-sm mb-1">Faol Foydalanuvchilar</p>
+                <p class="text-green-100 text-sm mb-1">Faol Askarlar</p>
                 <p class="text-4xl font-bold">{{ $activeUsers }}</p>
             </div>
             <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
@@ -238,7 +238,7 @@
             <div class="px-6 py-4 border-b border-slate-700">
                 <h3 class="text-lg font-bold text-white flex items-center">
                     <i class="fas fa-fire text-orange-400 mr-2"></i>
-                    Eng Faol Foydalanuvchilar
+                    Eng Faol Askarlar
                 </h3>
             </div>
             <div class="p-6">

@@ -20,7 +20,7 @@
 
                     @can('view-users')
                     <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                        <i class="fas fa-users mr-2"></i>{{ __('Foydalanuvchilar') }}
+                        <i class="fas fa-users mr-2"></i>{{ __('Askarlar') }}
                     </x-nav-link>
                     @endcan
 
@@ -71,8 +71,11 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('admin.users.show', Auth::user())">
+                            <i class="fas fa-user mr-2"></i>{{ __('Mening Profilim') }}
+                        </x-dropdown-link>
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            <i class="fas fa-cog mr-2"></i>{{ __('Sozlamalar') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -111,7 +114,7 @@
 
             @can('view-users')
             <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
-                {{ __('Foydalanuvchilar') }}
+                {{ __('Askarlar') }}
             </x-responsive-nav-link>
             @endcan
 
@@ -154,8 +157,11 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('admin.users.show', Auth::user())">
+                    <i class="fas fa-user mr-2"></i>{{ __('Mening Profilim') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    <i class="fas fa-cog mr-2"></i>{{ __('Sozlamalar') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

@@ -55,7 +55,7 @@
                     @endforeach
                 </div>
                 @else
-                <p class="text-gray-500">Bu rolda foydalanuvchilar yo'q</p>
+                <p class="text-gray-500">Bu rolda askarlar yo'q</p>
                 @endif
             </div>
 

@@ -46,6 +46,11 @@
             transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Alpine.js x-cloak */
+        [x-cloak] {
+            display: none !important;
+        }
+
         /* Gradient Backgrounds */
         .gradient-primary {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -120,7 +125,7 @@
                 <a href="{{ route('admin.users.index') }}"
                    class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.users.*') ? 'nav-item-active' : '' }}">
                     <i class="fas fa-users w-6 text-blue-400"></i>
-                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Foydalanuvchilar</span>
+                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Askarlar</span>
                 </a>
                 @endcan
 
@@ -216,15 +221,16 @@
                 <!-- Right Side -->
                 <div class="flex items-center space-x-4">
                     <!-- User Info -->
-                    <div class="flex items-center space-x-3">
+                    <a href="{{ route('admin.users.show', Auth::user()) }}" 
+                       class="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
                         <div class="text-right hidden sm:block">
                             <div class="text-sm font-medium">{{ Auth::user()->name }}</div>
                             <div class="text-xs text-gray-400">{{ Auth::user()->roles->first()?->name ?? 'User' }}</div>
                         </div>
-                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold">
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg hover:shadow-green-500/50 transition-all">
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                         </div>
-                    </div>
+                    </a>
 
                     <!-- Logout -->
                     <form method="POST" action="{{ route('logout') }}" class="hidden sm:block">

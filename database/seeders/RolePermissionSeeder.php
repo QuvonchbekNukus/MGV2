@@ -78,16 +78,16 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
         // Super Admin roli yaratish (barcha ruxsatlarga ega)
-        $superAdminRole = Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
-        $superAdminRole->givePermissionTo(Permission::all());
+        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
+        $superAdminRole->syncPermissions(Permission::all());
 
         // Admin roli
-        $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
-        $adminRole->givePermissionTo([
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $adminRole->syncPermissions([
             'view-dashboard',
             'view-users',
             'create-users',
@@ -101,11 +101,26 @@ class RolePermissionSeeder extends Seeder
             'create-posts',
             'edit-posts',
             'publish-posts',
+            // Group permissions
+            'view-groups',
+            'create-groups',
+            'edit-groups',
+            'delete-groups',
+            // Lesson permissions
+            'view-lessons',
+            'create-lessons',
+            'edit-lessons',
+            'delete-lessons',
+            // Toy permissions
+            'view-toys',
+            'create-toys',
+            'edit-toys',
+            'delete-toys',
         ]);
 
         // Moderator roli
-        $moderatorRole = Role::create(['name' => 'moderator', 'guard_name' => 'web']);
-        $moderatorRole->givePermissionTo([
+        $moderatorRole = Role::firstOrCreate(['name' => 'moderator', 'guard_name' => 'web']);
+        $moderatorRole->syncPermissions([
             'view-dashboard',
             'view-users',
             'view-posts',
@@ -114,8 +129,8 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // Editor roli
-        $editorRole = Role::create(['name' => 'editor', 'guard_name' => 'web']);
-        $editorRole->givePermissionTo([
+        $editorRole = Role::firstOrCreate(['name' => 'editor', 'guard_name' => 'web']);
+        $editorRole->syncPermissions([
             'view-dashboard',
             'view-posts',
             'create-posts',
@@ -123,66 +138,86 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // User roli (oddiy foydalanuvchi)
-        $userRole = Role::create(['name' => 'user', 'guard_name' => 'web']);
-        $userRole->givePermissionTo([
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+        $userRole->syncPermissions([
             'view-dashboard',
         ]);
 
         // Test foydalanuvchilarni yaratish
 
         // Super Admin
-        $superAdmin = User::create([
-            'name' => 'Super Admin',
-            'username' => 'superadmin',
-            'email' => 'superadmin@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '+998901234567',
-            'is_active' => true,
-        ]);
-        $superAdmin->assignRole($superAdminRole);
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'superadmin@example.com'],
+            [
+                'name' => 'Super Admin',
+                'username' => 'superadmin',
+                'password' => Hash::make('password'),
+                'phone' => '+998901234567',
+                'is_active' => true,
+            ]
+        );
+        if (!$superAdmin->hasRole($superAdminRole)) {
+            $superAdmin->assignRole($superAdminRole);
+        }
 
         // Admin
-        $admin = User::create([
-            'name' => 'Admin User',
-            'username' => 'admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '+998901234568',
-            'is_active' => true,
-        ]);
-        $admin->assignRole($adminRole);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'username' => 'admin',
+                'password' => Hash::make('password'),
+                'phone' => '+998901234568',
+                'is_active' => true,
+            ]
+        );
+        if (!$admin->hasRole($adminRole)) {
+            $admin->assignRole($adminRole);
+        }
 
         // Moderator
-        $moderator = User::create([
-            'name' => 'Moderator User',
-            'username' => 'moderator',
-            'email' => 'moderator@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '+998901234569',
-            'is_active' => true,
-        ]);
-        $moderator->assignRole($moderatorRole);
+        $moderator = User::firstOrCreate(
+            ['email' => 'moderator@example.com'],
+            [
+                'name' => 'Moderator User',
+                'username' => 'moderator',
+                'password' => Hash::make('password'),
+                'phone' => '+998901234569',
+                'is_active' => true,
+            ]
+        );
+        if (!$moderator->hasRole($moderatorRole)) {
+            $moderator->assignRole($moderatorRole);
+        }
 
         // Editor
-        $editor = User::create([
-            'name' => 'Editor User',
-            'username' => 'editor',
-            'email' => 'editor@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '+998901234570',
-            'is_active' => true,
-        ]);
-        $editor->assignRole($editorRole);
+        $editor = User::firstOrCreate(
+            ['email' => 'editor@example.com'],
+            [
+                'name' => 'Editor User',
+                'username' => 'editor',
+                'password' => Hash::make('password'),
+                'phone' => '+998901234570',
+                'is_active' => true,
+            ]
+        );
+        if (!$editor->hasRole($editorRole)) {
+            $editor->assignRole($editorRole);
+        }
 
         // Oddiy User
-        $normalUser = User::create([
-            'name' => 'Normal User',
-            'username' => 'user',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '+998901234571',
-            'is_active' => true,
-        ]);
-        $normalUser->assignRole($userRole);
+        $normalUser = User::firstOrCreate(
+            ['email' => 'user@example.com'],
+            [
+                'name' => 'Normal User',
+                'username' => 'user',
+                'password' => Hash::make('password'),
+                'phone' => '+998901234571',
+                'is_active' => true,
+            ]
+        );
+        if (!$normalUser->hasRole($userRole)) {
+            $normalUser->assignRole($userRole);
+        }
     }
 }

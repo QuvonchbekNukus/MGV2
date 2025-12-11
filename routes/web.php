@@ -160,4 +160,9 @@ Route::middleware(['auth', 'active.user'])->prefix('admin')->name('admin.')->gro
     // Toys (Qurollar) boshqaruvi
     Route::resource('toys', ToyController::class)
         ->middleware('permission:view-toys');
+
+    // Users search API for autocomplete
+    Route::get('/users/search', [UserController::class, 'search'])
+        ->middleware('permission:view-users')
+        ->name('users.search');
 });

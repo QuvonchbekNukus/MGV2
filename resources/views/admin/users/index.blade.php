@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Foydalanuvchilar')
-@section('page-title', 'Foydalanuvchilar')
+@section('title', 'Askarlar')
+@section('page-title', 'Askarlar')
 
 @section('content')
 <!-- Header Section -->
 <div class="flex justify-between items-center mb-8">
     <div>
-        <h1 class="text-3xl font-bold text-white mb-2">Foydalanuvchilar</h1>
-        <p class="text-gray-400">Tizim foydalanuvchilarini boshqarish</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Askarlar</h1>
+        <p class="text-gray-400">Tizim askarlarini boshqarish</p>
     </div>
     @can('create-users')
     <a href="{{ route('admin.users.create') }}" 
@@ -123,7 +123,7 @@
                     <td colspan="7" class="px-6 py-12 text-center">
                         <div class="flex flex-col items-center">
                             <i class="fas fa-users text-gray-600 text-5xl mb-4"></i>
-                            <p class="text-gray-400 text-lg">Foydalanuvchilar topilmadi</p>
+                            <p class="text-gray-400 text-lg">Askarlar topilmadi</p>
                         </div>
                     </td>
                 </tr>

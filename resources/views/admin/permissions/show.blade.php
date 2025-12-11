@@ -59,7 +59,7 @@
             <div class="p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm text-gray-500 mb-1">Bog'langan Foydalanuvchilar</p>
+                        <p class="text-sm text-gray-500 mb-1">Bog'langan Askarlar</p>
                         <p class="text-3xl font-bold text-gray-900">{{ $users->count() }}</p>
                     </div>
                     <div class="bg-blue-100 rounded-full p-3">
@@ -131,7 +131,7 @@
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">To'g'ridan-to'g'ri Bog'langan Foydalanuvchilar</h3>
+                <h3 class="text-lg font-semibold text-gray-900">To'g'ridan-to'g'ri Bog'langan Askarlar</h3>
                 <span class="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">
                     {{ $users->count() }} ta foydalanuvchi
                 </span>
