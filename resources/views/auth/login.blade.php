@@ -358,7 +358,7 @@
                     SECURE ACCESS
                 </h1>
                 <p class="text-green-400 text-sm font-mono tracking-wider">
-                    <i class="fas fa-lock mr-2"></i>MILITARY GRADE ENCRYPTION
+                    <i class="fas fa-lock mr-2"></i>E-GVARDIYA TIZIMIGA XUSH KELIBSIZ
                 </p>
                 <div class="flex items-center justify-center mt-2 space-x-2">
                     <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -401,7 +401,7 @@
                         <!-- Username Input -->
                         <div class="relative">
                             <label class="block text-green-400 text-sm font-mono mb-2 tracking-wide">
-                                <i class="fas fa-user-circle mr-2"></i>USERNAME
+                                <i class="fas fa-user-circle mr-2"></i>FOYDALANUVCHI NOMI
                             </label>
                             <div class="relative">
                                 <input type="text"
@@ -425,7 +425,7 @@
                         <!-- Password Input -->
                         <div class="relative" x-data="{ showPassword: false }">
                             <label class="block text-green-400 text-sm font-mono mb-2 tracking-wide">
-                                <i class="fas fa-key mr-2"></i>AUTHENTICATION KEY
+                                <i class="fas fa-key mr-2"></i>PAROL
                             </label>
                             <div class="relative">
                                 <input :type="showPassword ? 'text' : 'password'"
@@ -470,19 +470,9 @@
                                 class="cyber-button w-full py-4 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 hover:from-green-500 hover:via-emerald-500 hover:to-teal-500 text-white font-bold rounded-lg shadow-lg transform hover:scale-[1.02] transition-all orbitron text-lg relative overflow-hidden">
                             <span class="relative z-10 flex items-center justify-center">
                                 <i class="fas fa-fingerprint mr-2"></i>
-                                INITIATE ACCESS
+                                TIZIMGA KIRISH
                             </span>
                         </button>
-
-                        {{-- <!-- Forgot Password -->
-                        @if (Route::has('password.request'))
-                        <div class="text-center pt-4 border-t border-slate-700">
-                            <a href="{{ route('password.request') }}"
-                               class="text-green-400 hover:text-green-300 text-sm font-mono transition-colors">
-                                <i class="fas fa-unlock-alt mr-2"></i>RECOVER ACCESS
-                            </a>
-                        </div>
-                        @endif --}}
                     </form>
 
                     <!-- Security Info -->
@@ -498,13 +488,13 @@
                                 <div class="text-green-400 text-xs font-mono mb-1">
                                     <i class="fas fa-lock"></i>
                                 </div>
-                                <div class="text-gray-500 text-xs font-mono">ENCRYPTED</div>
+                                <div class="text-gray-500 text-xs font-mono">HIMOYALANGAN</div>
                             </div>
                             <div>
                                 <div class="text-green-400 text-xs font-mono mb-1">
                                     <i class="fas fa-check-circle"></i>
                                 </div>
-                                <div class="text-gray-500 text-xs font-mono">SECURED</div>
+                                <div class="text-gray-500 text-xs font-mono">HAVFSIZ</div>
                             </div>
                         </div>
                     </div>
