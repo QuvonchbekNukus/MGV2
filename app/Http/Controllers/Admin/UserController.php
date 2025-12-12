@@ -86,12 +86,25 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        // Agar user o'z profilini ko'rmoqchi bo'lsa, ruxsat beriladi
+        // Aks holda view-users permission kerak
+        if ($user->id !== auth()->id() && !auth()->user()->can('view-users')) {
+            abort(403, 'Sizda bu sahifani ko\'rish uchun ruxsat yo\'q');
+        }
+
         $user->load('roles', 'permissions', 'group', 'toys');
 
         // User ning barcha aktivliklari
-        $activities = ActivityLog::where('user_id', $user->id)
-            ->latest()
-            ->paginate(20);
+        // Agar user o'z profilini ko'rmayotgan bo'lsa va view-activity-logs permission bo'lmasa, faqat o'z aktivliklarini ko'rsat
+        $activitiesQuery = ActivityLog::where('user_id', $user->id);
+
+        // Faqat o'z profilini ko'rayotganda yoki view-activity-logs permission bo'lganda barcha aktivliklarni ko'rsat
+        if ($user->id !== auth()->id() && !auth()->user()->can('view-activity-logs')) {
+            // Boshqa user'ning aktivliklarini ko'rishga ruxsat yo'q
+            $activitiesQuery = ActivityLog::where('user_id', auth()->id())->where('id', 0); // Hech narsa qaytarmaslik uchun
+        }
+
+        $activities = $activitiesQuery->latest()->paginate(20);
 
         // Statistika
         $activityStats = [
@@ -209,30 +222,51 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->get('q', '');
+        $query = trim($request->get('q', ''));
 
         if (strlen($query) < 2) {
             return response()->json([]);
         }
 
-        $users = User::where('name', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
-            ->orWhere('username', 'like', "%{$query}%")
-            ->orWhere('second_name', 'like', "%{$query}%")
-            ->orWhere('third_name', 'like', "%{$query}%")
-            ->limit(10)
-            ->get()
-            ->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'second_name' => $user->second_name,
-                    'third_name' => $user->third_name,
-                    'email' => $user->email,
-                    'username' => $user->username,
-                    'full_name' => trim($user->name . ' ' . ($user->second_name ?? '') . ' ' . ($user->third_name ?? '')),
-                ];
-            });
+        // Qidiruv so'zlarini bo'lish (bo'sh joylar bo'yicha)
+        $searchTerms = preg_split('/\s+/', $query);
+        $searchTerms = array_filter($searchTerms, function($term) {
+            return strlen(trim($term)) > 0;
+        });
+
+        $users = User::where(function($q) use ($query, $searchTerms) {
+            // Asosiy qidiruv - to'liq matn bo'yicha (ism, familiya, otasining ismi)
+            $q->where('name', 'like', "%{$query}%")
+              ->orWhere('second_name', 'like', "%{$query}%")
+              ->orWhere('third_name', 'like', "%{$query}%")
+              ->orWhere('email', 'like', "%{$query}%")
+              ->orWhere('username', 'like', "%{$query}%");
+
+            // Bir nechta so'z kiritilganda, har bir so'zni alohida qidirish
+            // Masalan: "Ali Valiyev" -> "Ali" va "Valiyev"ni alohida qidirish
+            if (count($searchTerms) > 1) {
+                foreach ($searchTerms as $term) {
+                    $q->orWhere(function($subQuery) use ($term) {
+                        $subQuery->where('name', 'like', "%{$term}%")
+                                 ->orWhere('second_name', 'like', "%{$term}%")
+                                 ->orWhere('third_name', 'like', "%{$term}%");
+                    });
+                }
+            }
+        })
+        ->limit(10)
+        ->get()
+        ->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'second_name' => $user->second_name,
+                'third_name' => $user->third_name,
+                'email' => $user->email,
+                'username' => $user->username,
+                'full_name' => trim($user->name . ' ' . ($user->second_name ?? '') . ' ' . ($user->third_name ?? '')),
+            ];
+        });
 
         return response()->json($users);
     }

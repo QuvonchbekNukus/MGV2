@@ -54,7 +54,7 @@ Route::middleware(['auth', 'active.user'])->prefix('admin')->name('admin.')->gro
         ->name('users.store');
 
     Route::get('/users/{user}', [UserController::class, 'show'])
-        ->middleware('permission:view-users')
+        ->middleware('auth')
         ->name('users.show');
 
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])
@@ -154,8 +154,38 @@ Route::middleware(['auth', 'active.user'])->prefix('admin')->name('admin.')->gro
         ->middleware('permission:view-groups');
 
     // Lessons boshqaruvi
-    Route::resource('lessons', LessonController::class)
-        ->middleware('permission:view-lessons');
+    // Index - faqat view-lessons permission bo'lganda
+    Route::get('/lessons', [LessonController::class, 'index'])
+        ->middleware('permission:view-lessons')
+        ->name('lessons.index');
+
+    // Create - barcha userlar uchun (o'z guruhiga qo'shish) - {lesson} dan oldin bo'lishi kerak
+    Route::get('/lessons/create', [LessonController::class, 'create'])
+        ->name('lessons.create');
+
+    Route::post('/lessons', [LessonController::class, 'store'])
+        ->name('lessons.store');
+
+    // Edit - barcha userlar uchun (o'zi qo'shgan lessonni tahrirlash) - {lesson} dan oldin bo'lishi kerak
+    Route::get('/lessons/{lesson}/edit', [LessonController::class, 'edit'])
+        ->name('lessons.edit');
+
+    // Show va Update - faqat view-lessons permission bo'lganda
+    Route::get('/lessons/{lesson}', [LessonController::class, 'show'])
+        ->middleware('permission:view-lessons')
+        ->name('lessons.show');
+
+    Route::put('/lessons/{lesson}', [LessonController::class, 'update'])
+        ->name('lessons.update');
+
+    // Delete - faqat edit-lessons permission bo'lganda
+    Route::delete('/lessons/{lesson}', [LessonController::class, 'destroy'])
+        ->middleware('permission:edit-lessons')
+        ->name('lessons.destroy');
+
+    // Guruh Jurnallari - barcha userlar uchun (o'z guruhidagi darslarni ko'rish)
+    Route::get('/group-journals/{group:id_group}', [LessonController::class, 'groupJournal'])
+        ->name('group-journals.show');
 
     // Toys (Qurollar) boshqaruvi
     Route::resource('toys', ToyController::class)

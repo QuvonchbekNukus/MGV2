@@ -129,22 +129,6 @@
                 </a>
                 @endcan
 
-                @can('view-roles')
-                <a href="{{ route('admin.roles.index') }}"
-                   class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.roles.*') ? 'nav-item-active' : '' }}">
-                    <i class="fas fa-user-tag w-6 text-purple-400"></i>
-                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Rollar</span>
-                </a>
-                @endcan
-
-                @can('view-permissions')
-                <a href="{{ route('admin.permissions.index') }}"
-                   class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.permissions.*') ? 'nav-item-active' : '' }}">
-                    <i class="fas fa-key w-6 text-yellow-400"></i>
-                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Ruxsatlar</span>
-                </a>
-                @endcan
-
                 @can('view-groups')
                 <a href="{{ route('admin.groups.index') }}"
                    class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.groups.*') ? 'nav-item-active' : '' }}">
@@ -153,13 +137,48 @@
                 </a>
                 @endcan
 
-                @can('view-lessons')
-                <a href="{{ route('admin.lessons.index') }}"
-                   class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.lessons.*') ? 'nav-item-active' : '' }}">
-                    <i class="fas fa-book w-6 text-pink-400"></i>
-                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Darslar</span>
-                </a>
-                @endcan
+                @if(auth()->user()->can('view-lessons') || auth()->user()->group)
+                <div x-data="{ open: {{ request()->routeIs('admin.group-journals.*') ? 'true' : 'false' }} }" class="relative">
+                    <button @click="open = !open"
+                            class="w-full flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.group-journals.*') ? 'nav-item-active' : '' }}">
+                        <i class="fas fa-book w-6 text-pink-400"></i>
+                        <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium flex-1 text-left">Guruh Jurnallari</span>
+                        <i x-show="sidebarOpen" x-transition :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-gray-400 text-xs"></i>
+                    </button>
+                    <div x-show="open && sidebarOpen"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform -translate-y-2"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         x-cloak
+                         class="ml-12 mt-1 space-y-1">
+                        @if(auth()->user()->can('view-lessons'))
+                            @isset($groups)
+                                @foreach($groups as $group)
+                                    <a href="{{ route('admin.group-journals.show', $group) }}"
+                                       class="flex items-center px-3 py-2 rounded-lg hover:bg-slate-700 transition-colors text-sm {{ request()->routeIs('admin.group-journals.show') && request()->route('group') && request()->route('group')->id_group == $group->id_group ? 'bg-slate-700 text-green-400' : 'text-gray-400' }}">
+                                        <i class="fas fa-users w-4 text-blue-400"></i>
+                                        <span class="ml-2">{{ $group->name }}</span>
+                                        @if(request()->routeIs('admin.group-journals.show') && request()->route('group') && request()->route('group')->id_group == $group->id_group)
+                                            <i class="fas fa-check-circle ml-auto text-green-400 text-xs"></i>
+                                        @endif
+                                    </a>
+                                @endforeach
+                            @endisset
+                        @else
+                            @if(auth()->user()->group)
+                                <a href="{{ route('admin.group-journals.show', auth()->user()->group) }}"
+                                   class="flex items-center px-3 py-2 rounded-lg hover:bg-slate-700 transition-colors text-sm {{ request()->routeIs('admin.group-journals.show') && request()->route('group') && request()->route('group')->id_group == auth()->user()->id_group ? 'bg-slate-700 text-green-400' : 'text-gray-400' }}">
+                                    <i class="fas fa-users w-4 text-blue-400"></i>
+                                    <span class="ml-2">{{ auth()->user()->group->name }}</span>
+                                    @if(request()->routeIs('admin.group-journals.show') && request()->route('group') && request()->route('group')->id_group == auth()->user()->id_group)
+                                        <i class="fas fa-check-circle ml-auto text-green-400 text-xs"></i>
+                                    @endif
+                                </a>
+                            @endif
+                        @endif
+                    </div>
+                </div>
+                @endif
 
                 @can('view-toys')
                 <a href="{{ route('admin.toys.index') }}"
@@ -177,13 +196,44 @@
                 </a>
                 @endcan
 
-                @can('view-settings')
-                <a href="#"
-                   class="flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors">
-                    <i class="fas fa-cog w-6 text-gray-400"></i>
-                    <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium">Sozlamalar</span>
-                </a>
-                @endcan
+                @if(auth()->user()->can('view-roles') || auth()->user()->can('view-permissions'))
+                <div x-data="{ open: {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'true' : 'false' }} }" class="relative">
+                    <button @click="open = !open"
+                            class="w-full flex items-center px-3 py-3 rounded-lg hover:bg-slate-700 transition-colors {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') ? 'nav-item-active' : '' }}">
+                        <i class="fas fa-cog w-6 text-gray-400"></i>
+                        <span x-show="sidebarOpen" x-transition class="ml-3 text-sm font-medium flex-1 text-left">Sozlamalar</span>
+                        <i x-show="sidebarOpen" x-transition :class="open ? 'fa-chevron-up' : 'fa-chevron-down'" class="fas text-gray-400 text-xs"></i>
+                    </button>
+                    <div x-show="open && sidebarOpen"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 transform -translate-y-2"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                         x-cloak
+                         class="ml-12 mt-1 space-y-1">
+                        @can('view-roles')
+                        <a href="{{ route('admin.roles.index') }}"
+                           class="flex items-center px-3 py-2 rounded-lg hover:bg-slate-700 transition-colors text-sm {{ request()->routeIs('admin.roles.*') ? 'bg-slate-700 text-purple-400' : 'text-gray-400' }}">
+                            <i class="fas fa-user-tag w-4 text-purple-400"></i>
+                            <span class="ml-2">Rollar</span>
+                            @if(request()->routeIs('admin.roles.*'))
+                                <i class="fas fa-check-circle ml-auto text-purple-400 text-xs"></i>
+                            @endif
+                        </a>
+                        @endcan
+
+                        @can('view-permissions')
+                        <a href="{{ route('admin.permissions.index') }}"
+                           class="flex items-center px-3 py-2 rounded-lg hover:bg-slate-700 transition-colors text-sm {{ request()->routeIs('admin.permissions.*') ? 'bg-slate-700 text-yellow-400' : 'text-gray-400' }}">
+                            <i class="fas fa-key w-4 text-yellow-400"></i>
+                            <span class="ml-2">Ruxsatlar</span>
+                            @if(request()->routeIs('admin.permissions.*'))
+                                <i class="fas fa-check-circle ml-auto text-yellow-400 text-xs"></i>
+                            @endif
+                        </a>
+                        @endcan
+                    </div>
+                </div>
+                @endif
             </nav>
 
             <!-- Sidebar Toggle Button -->
@@ -221,7 +271,7 @@
                 <!-- Right Side -->
                 <div class="flex items-center space-x-4">
                     <!-- User Info -->
-                    <a href="{{ route('admin.users.show', Auth::user()) }}" 
+                    <a href="{{ route('admin.users.show', Auth::user()) }}"
                        class="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer">
                         <div class="text-right hidden sm:block">
                             <div class="text-sm font-medium">{{ Auth::user()->name }}</div>

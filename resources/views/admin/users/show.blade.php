@@ -17,19 +17,36 @@
                     {{ $user->third_name }}
                 @endif
             </h1>
-            <p class="text-gray-400">Askar to'liq ma'lumotlari va aktivliklari</p>
+            <p class="text-gray-400">
+                @if($user->id === auth()->id())
+                    Mening profilim
+                @else
+                    Askar to'liq ma'lumotlari va aktivliklari
+                @endif
+            </p>
         </div>
         <div class="flex space-x-3">
-            @can('edit-users')
-            <a href="{{ route('admin.users.edit', $user) }}"
-               class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all">
-                <i class="fas fa-edit mr-2"></i>Tahrirlash
-            </a>
-            @endcan
-            <a href="{{ route('admin.users.index') }}"
-               class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-all">
-                <i class="fas fa-arrow-left mr-2"></i>Orqaga
-            </a>
+            @if($user->id === auth()->id())
+                @can('edit-users')
+                <a href="{{ route('admin.users.edit', $user) }}"
+                   class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all">
+                    <i class="fas fa-edit mr-2"></i>Tahrirlash
+                </a>
+                @endcan
+            @else
+                @can('edit-users')
+                <a href="{{ route('admin.users.edit', $user) }}"
+                   class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-all">
+                    <i class="fas fa-edit mr-2"></i>Tahrirlash
+                </a>
+                @endcan
+                @can('view-users')
+                <a href="{{ route('admin.users.index') }}"
+                   class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-all">
+                    <i class="fas fa-arrow-left mr-2"></i>Orqaga
+                </a>
+                @endcan
+            @endif
         </div>
     </div>
 
@@ -278,7 +295,7 @@
                                         @endif
                                     </div>
                                     @can('view-toys')
-                                    <a href="{{ route('admin.toys.show', $toy) }}" 
+                                    <a href="{{ route('admin.toys.show', $toy) }}"
                                        class="p-2 bg-orange-600/20 hover:bg-orange-600/30 rounded-lg text-orange-400 transition-all"
                                        title="Batafsil">
                                         <i class="fas fa-eye"></i>

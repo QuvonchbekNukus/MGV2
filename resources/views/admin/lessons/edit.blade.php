@@ -7,9 +7,15 @@
 <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center space-x-4">
-        <a href="{{ route('admin.lessons.show', $lesson) }}" class="text-gray-400 hover:text-white transition-colors">
-            <i class="fas fa-arrow-left text-xl"></i>
-        </a>
+        @if(auth()->user()->can('view-lessons'))
+            <a href="{{ route('admin.lessons.show', $lesson) }}" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+        @elseif(auth()->user()->group)
+            <a href="{{ route('admin.group-journals.show', auth()->user()->group) }}" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+        @endif
         <div>
             <h1 class="text-3xl font-bold text-white">
                 <i class="fas fa-edit text-blue-400 mr-3"></i>Darsni Tahrirlash
@@ -37,12 +43,13 @@
             </div>
 
             <!-- Group -->
+            @if(auth()->user()->can('view-lessons'))
             <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
                     <i class="fas fa-users mr-2 text-purple-400"></i>Guruh
                 </label>
                 <select name="id_group" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors" required>
-                    @foreach(\App\Models\Group::all() as $group)
+                    @foreach($groups as $group)
                         <option value="{{ $group->id_group }}" {{ old('id_group', $lesson->id_group) == $group->id_group ? 'selected' : '' }}>
                             {{ $group->name }}
                         </option>
@@ -52,16 +59,20 @@
                     <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            @else
+                <input type="hidden" name="id_group" value="{{ auth()->user()->id_group }}">
+            @endif
 
             <!-- Instructor -->
+            @if(auth()->user()->can('view-lessons'))
             <div>
                 <label class="block text-sm font-medium text-gray-300 mb-2">
                     <i class="fas fa-user mr-2 text-yellow-400"></i>O'qituvchi
                 </label>
                 <select name="id_user" class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors" required>
-                    @foreach(\App\Models\User::all() as $user)
-                        <option value="{{ $user->id }}" {{ old('id_user', $lesson->id_user) == $user->id ? 'selected' : '' }}>
-                            {{ $user->name }} ({{ $user->email }})
+                    @foreach($instructors as $instructor)
+                        <option value="{{ $instructor->id }}" {{ old('id_user', $lesson->id_user) == $instructor->id ? 'selected' : '' }}>
+                            {{ $instructor->name }} ({{ $instructor->email }})
                         </option>
                     @endforeach
                 </select>
@@ -69,6 +80,9 @@
                     <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            @else
+                <input type="hidden" name="id_user" value="{{ auth()->user()->id }}">
+            @endif
 
             <!-- Lesson Date -->
             <div>
@@ -89,7 +103,7 @@
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         <i class="fas fa-play mr-2 text-green-400"></i>Boshlanish Vaqti
                     </label>
-                    <input type="time" name="start_at" value="{{ old('start_at', $lesson->start_at) }}"
+                    <input type="time" name="start_at" value="{{ old('start_at', $lesson->start_at ? \Carbon\Carbon::parse($lesson->start_at)->format('H:i') : '') }}"
                            class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-green-500 transition-colors"
                            required>
                     @error('start_at')

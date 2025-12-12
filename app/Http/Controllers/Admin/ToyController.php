@@ -63,7 +63,8 @@ class ToyController extends Controller
     public function edit(Toy $toy)
     {
         $toy->load('user');
-        return view('admin.toys.edit', compact('toy'));
+        $users = User::all();
+        return view('admin.toys.edit', compact('toy', 'users'));
     }
 
     /**

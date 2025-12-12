@@ -10,7 +10,8 @@
     <p class="text-gray-400">Bu yerda tizim statistikasi va oxirgi ma'lumotlarni ko'rishingiz mumkin</p>
 </div>
 
-<!-- Statistics Cards Row 1 -->
+<!-- Statistics Cards Row 1 - Faqat admin uchun -->
+@can('view-users')
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
     <!-- Total Users Card -->
     <div class="stat-card gradient-info rounded-xl p-6 text-white shadow-lg">
@@ -47,6 +48,7 @@
     </div>
 
     <!-- Total Roles Card -->
+    @can('view-roles')
     <div class="stat-card gradient-warning rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between mb-4">
             <div>
@@ -62,8 +64,10 @@
             <span>Rol va huquqlar</span>
         </div>
     </div>
+    @endcan
 
     <!-- Total Permissions Card -->
+    @can('view-permissions')
     <div class="stat-card gradient-danger rounded-xl p-6 text-white shadow-lg">
         <div class="flex items-center justify-between mb-4">
             <div>
@@ -79,7 +83,9 @@
             <span>Tizim ruxsatlari</span>
         </div>
     </div>
+    @endcan
 </div>
+@endcan
 
 <!-- Activity Statistics Row -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -232,7 +238,8 @@
         </div>
     </div>
 
-    <!-- Most Active Users Widget (1 column) -->
+    <!-- Most Active Users Widget (1 column) - Faqat admin uchun -->
+    @can('view-users')
     <div class="lg:col-span-1">
         <div class="bg-slate-800/50 border border-slate-700 rounded-lg backdrop-blur-sm">
             <div class="px-6 py-4 border-b border-slate-700">
@@ -288,6 +295,7 @@
             </div>
         </div>
     </div>
+    @endcan
 </div>
 
 <!-- Activity Chart -->
