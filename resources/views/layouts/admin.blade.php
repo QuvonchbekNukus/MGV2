@@ -17,77 +17,11 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-
-        /* Sidebar Animation */
-        .sidebar-transition {
-            transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Alpine.js x-cloak */
-        [x-cloak] {
-            display: none !important;
-        }
-
-        /* Gradient Backgrounds */
-        .gradient-primary {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        }
-
-        .gradient-success {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        }
-
-        .gradient-warning {
-            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-        }
-
-        .gradient-danger {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-        }
-
-        .gradient-info {
-            background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
-        }
-
-        /* Card Hover Effect */
-        .stat-card {
-            transition: transform 300ms, box-shadow 300ms;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Active Nav Item */
-        .nav-item-active {
-            background: linear-gradient(90deg, #10b981 0%, transparent 100%);
-            border-left: 4px solid #10b981;
-        }
-    </style>
+    <!-- Admin CSS -->
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
     @stack('styles')
 </head>
@@ -315,83 +249,31 @@
 
     @stack('scripts')
 
-    <!-- Toast Notification Script -->
+    <!-- Common JS -->
+    <script src="{{ asset('js/common.js') }}"></script>
+
+    <!-- Admin JS -->
+    <script src="{{ asset('js/admin.js') }}"></script>
+
+    <!-- Session Messages Handler -->
     <script>
-        // Toast Notification Function
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                showToast("{{ session('success') }}", 'success');
+            @endif
 
-            const colors = {
-                success: 'from-green-600 to-green-700 border-green-500',
-                error: 'from-red-600 to-red-700 border-red-500',
-                warning: 'from-yellow-600 to-yellow-700 border-yellow-500',
-                info: 'from-blue-600 to-blue-700 border-blue-500'
-            };
+            @if(session('error'))
+                showToast("{{ session('error') }}", 'error');
+            @endif
 
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-times-circle',
-                warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle'
-            };
+            @if(session('warning'))
+                showToast("{{ session('warning') }}", 'warning');
+            @endif
 
-            toast.className = `toast-item bg-gradient-to-r ${colors[type] || colors.success} border-2 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center space-x-3 min-w-[300px] max-w-md animate-slide-down`;
-            toast.innerHTML = `
-                <i class="fas ${icons[type] || icons.success} text-2xl"></i>
-                <span class="flex-1 font-medium">${message}</span>
-                <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white transition-colors">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-
-            container.appendChild(toast);
-
-            // Auto remove after 5 seconds
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
-                setTimeout(() => toast.remove(), 300);
-            }, 5000);
-        }
-
-        // Show toasts on page load if there are session messages
-        @if(session('success'))
-            showToast("{{ session('success') }}", 'success');
-        @endif
-
-        @if(session('error'))
-            showToast("{{ session('error') }}", 'error');
-        @endif
-
-        @if(session('warning'))
-            showToast("{{ session('warning') }}", 'warning');
-        @endif
-
-        @if(session('info'))
-            showToast("{{ session('info') }}", 'info');
-        @endif
+            @if(session('info'))
+                showToast("{{ session('info') }}", 'info');
+            @endif
+        });
     </script>
-
-    <style>
-        @keyframes slide-down {
-            from {
-                opacity: 0;
-                transform: translateY(-100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-slide-down {
-            animation: slide-down 0.3s ease-out;
-        }
-
-        .toast-item {
-            transition: all 0.3s ease-out;
-        }
-    </style>
 </body>
 </html>

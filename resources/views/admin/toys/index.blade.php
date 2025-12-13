@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Qurollar')
+@section('page-title', 'Qurollar')
 
 @section('content')
 <div class="space-y-6">

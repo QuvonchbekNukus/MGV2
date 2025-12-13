@@ -11,17 +11,32 @@ use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\ToyController;
 
-// Asosiy sahifa - agar login bo'lsa dashboard, aks holda login
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('admin.dashboard');
-    }
-    return redirect()->route('login');
-});
+
+//Sayt haqida malumot beruvchi sahifalar uchun routelar
+Route::get("/", function(){
+    return view("guestpages.index");
+})->name("guestpages.index");
+
+Route::get("/about", function(){
+    return view("guestpages.about");
+})->name("guestpages.about");
+
+Route::get("/courses", function(){
+    return view("guestpages.courses");
+})->name("guestpages.courses");
+
+Route::get("/contacts", function(){
+    return view("guestpages.contact");
+})->name("guestpages.contacts");
+
+
 
 // Standart dashboard (ishlatilmaydi, lekin Breeze uchun kerak)
 Route::get('/dashboard', function () {
-    return redirect()->route('admin.dashboard');
+    if(auth()->check()){
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('login');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

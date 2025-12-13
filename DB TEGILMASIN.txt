@@ -1,0 +1,90 @@
+guruh(otryad){
+ id_group,
+ name,
+ type,
+ description,
+}
+user{
+ id_user,
+ name,
+ second_name,
+ third_name(ochestva),
+ adress(propiska,manzili),
+ phone,
+ jinsi,
+ rank,(harbiy unvoni),
+ job_title(mansabi),
+ job_responsibility(lavozim majburiyati),
+ is_married(boydoq/turmus qurgan),
+ degree(ma`lumoti,oliy orta),
+ passport_seria,
+ passport_code,
+ height(bo`yi),
+ weight(vazni),
+ license_code(guvohnoma nomeri)
+ klassnost(klassnost darajasini belgilaydi)
+}
+lessons{
+ id_lesson,
+ topic(dars nomi),
+ id_group,
+ id_user(darsni yaratgan,o`tgan shaxs),
+ lesson_date(dars o`tilgan sana),
+ lesson_duration(dars nechchi soat o`tilgan),
+ start_at(dars boshlangan vaqt),
+ end_at(dars tugash vaqti),
+}
+toys(qurollar){
+ id_toy,
+ name,
+ code,
+ made_at,
+ made_in,
+ type,
+ description,
+ id_user
+}
+attendance{
+ id_attendance
+ user_id      (foreign key -> users.id)
+ lesson_id    (foreign key -> lessons.id)
+ status       (enum yoki string: 'attended', 'absent', 'late')
+ created_at
+ updated_at
+}
+attendance_status{
+id_attstatus
+name        (masalan: 'attended', 'absent', 'late')
+description (ixtiyoriy: izoh, masalan "qatnashgan", "qatnashmagan", "kechikkan")
+created_at
+updated_at
+}
+vacation_records{
+ id_vacation,
+ id_user,
+ start_at,
+ end_at,
+ vocation_type,
+ description(qo`shimcha),
+}
+driving_license{
+ id_licence,
+ category(enum :A1,A,B,C,D,BE,CE,DE),
+ issue_date(berilgan sana),
+ expiry_date(tugash muddati),
+ id_user,
+ description(qo`shimcha ma`lumot)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+ 
