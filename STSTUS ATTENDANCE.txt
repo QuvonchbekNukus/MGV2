@@ -1,0 +1,10 @@
+Status{
+ qatnashdi,
+ tatilda,
+ xizmat safarida,
+ naryad,
+ tibbiyot punktida,
+ safda,
+ xizmatda,
+ patrulda
+}
